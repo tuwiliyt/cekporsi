@@ -1,16 +1,15 @@
-# 🕋 Cek Estimasi Haji: Aplikasi Anti-Galau Menanti Panggilan Ilahi 🕋
+# 🕋 Pusat Cek Haji: Aplikasi Anti-Galau Serbaguna 🕋
 
-Selamat datang di aplikasi paling revolusioner abad ini (mungkin)! Pernahkah Anda terbangun di tengah malam, keringat dingin bercucuran, hanya karena lupa kapan giliran Anda naik haji? Atau mungkin Anda hanya penasaran apakah cucu Anda sudah bisa daftar?
+Selamat datang di pusat kendali haji paling revolusioner abad ini (mungkin)! Pernahkah Anda galau karena lupa kapan giliran berangkat? Atau cemas memikirkan status pembatalan? Aplikasi ini adalah jawaban dari semua doa Anda (terkait pengecekan haji, tentunya).
 
-Jangan khawatir! Aplikasi ini hadir sebagai penawar kegalauan Anda. Cukup masukkan nomor porsi Anda, dan biarkan keajaiban estimasi bekerja. Kami tidak menjamin akurasi 100% (karena takdir di tangan Tuhan, bukan API), tapi setidaknya Anda punya angka untuk diomongin di arisan.
+Kini lebih canggih! Kami telah mengubah aplikasi ini menjadi pusat navigasi terpadu. Dari satu halaman utama yang megah, Anda bisa memilih petualangan Anda: mencari tahu estimasi keberangkatan atau memantau status pembatalan.
 
-## ✨ Fitur-Fitur Spektakuler (yang Kami Punya):
+## ✨ Fitur-Fitur Spektakuler (yang Kini Lebih Banyak):
 
-*   **Pencarian Kilat:** Masukkan nomor porsi, *voila!* Estimasi muncul secepat kilat (tergantung koneksi internet Anda, sih).
-*   **Tampilan Elegan:** Kami sudah berusaha keras agar tampilannya tidak bikin mata perih. Ada mode terang dan gelap juga, biar mata Anda tetap sehat walafiat saat menanti panggilan.
-*   **Estimasi Masehi yang Unik:** Tahun keberangkatan Anda akan tampil dengan gaya yang bikin tetangga iri. Dijamin!
-*   **Tanggal Cek:** Biar Anda tahu kapan terakhir kali Anda galau mengecek estimasi.
-*   **Backend Rahasia:** Ada server Node.js di belakang layar yang bekerja keras mengambil data dari Kemenag. Jangan tanya rahasianya, nanti dia ngambek.
+*   **Halaman Utama Megah:** Sebuah portal dengan logo Ka'bah SVG hasil mahakarya digital, siap mengantar Anda ke layanan yang Anda butuhkan.
+*   **Cek Estimasi Keberangkatan:** Masukkan nomor porsi, dan *voila!* Estimasi muncul secepat kilat. Lengkap dengan mode gelap agar mata tidak lelah berharap.
+*   **Cek Status Pembatalan:** Fitur baru yang super canggih! Masukkan nomor porsi untuk melihat status pembatalan, informasi ahli waris, hingga status transfer dana. Semua transparan, tidak ada yang ditutup-tutupi.
+*   **Backend Rahasia yang Lebih Sibuk:** Server Node.js kami kini punya dua tugas berat, melayani estimasi dan pembatalan. Mohon jangan diganggu, dia sedang stres.
 
 ## 🚀 Cara Menjalankan Aplikasi Ini (Jangan Sampai Salah Langkah!):
 
@@ -24,14 +23,14 @@ Jangan khawatir! Aplikasi ini hadir sebagai penawar kegalauan Anda. Cukup masukk
     ```bash
     npm start
     ```
-    (Server akan berjalan di `http://localhost:3000`. Jangan kaget kalau dia tidak menyapa).
-4.  **Buka di Browser:** Buka browser kesayangan Anda dan kunjungi `http://localhost:3000`.
+    (Server akan berjalan di `http://localhost:3000`. Dia akan menyajikan halaman utama yang cantik).
+4.  **Buka di Browser:** Buka browser kesayangan Anda dan kunjungi `http://localhost:3000`. Pilih layanan yang Anda inginkan.
 
-## 🐛 Bug? Itu Fitur!
+## 🐛 Bug? Itu Ujian Kesabaran!
 
-Jika Anda menemukan bug, itu bukan bug. Itu adalah fitur tersembunyi yang menunggu untuk ditemukan. Tapi kalau memang mengganggu, silakan lapor. Kami akan pura-pura sibuk.
+Jika Anda menemukan bug, anggap itu sebagai ujian. Tapi kalau memang sudah tidak sabar, silakan lapor. Kami akan mempertimbangkannya di rapat prioritas tertinggi (setelah ngopi).
 
-## 💖 Dikembangkan dengan Cinta (dan Sedikit Kopi):
+## 💖 Dikembangkan dengan Cinta (dan Banyak Kopi):
 
 *   develop by richieoct 2025
 
