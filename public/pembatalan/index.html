@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cek Status Pembatalan Haji</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    :root {
+      --body-bg: #e9ecef;
+      --text-color: #212529;
+      --card-bg: #ffffff;
+      --card-header-bg: #dc3545; /* Red for cancellation */
+      --card-header-text: #ffffff;
+      --list-item-text: #495057;
+      --input-bg: #ffffff;
+      --input-text: #212529;
+      --alert-bg: #fff3cd;
+      --alert-text: #664d03;
+      --alert-border: #ffecb5;
+      --timestamp-bg: #e2e6ea;
+      --timestamp-text: #6c757d;
+      --timestamp-border: #adb5bd;
+    }
+
+    body.dark-mode {
+      --body-bg: #212529;
+      --text-color: #f8f9fa;
+      --card-bg: #2c3034;
+      --card-header-bg: #842029; /* Darker red */
+      --card-header-text: #f8f9fa;
+      --list-item-text: #f8f9fa;
+      --input-bg: #3a3f44;
+      --input-text: #f8f9fa;
+      --alert-bg: #6c757d;
+      --alert-text: #ffffff;
+      --alert-border: #495057;
+      --timestamp-bg: #495057;
+      --timestamp-text: #f8f9fa;
+      --timestamp-border: #6c757d;
+    }
+
+    body {
+      background-color: var(--body-bg);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .main-container {
+      max-width: 650px;
+      width: 100%;
+    }
+    .card {
+      border: none;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background-color: var(--card-bg);
+      transition: background-color 0.3s ease;
+    }
+    .card-header {
+      background-color: var(--card-header-bg);
+      color: var(--card-header-text);
+      border-top-left-radius: 0.75rem;
+      border-top-right-radius: 0.75rem;
+      padding: 1.5rem;
+      position: relative;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .list-group-item .fw-bold {
+      color: var(--list-item-text);
+      transition: color 0.3s ease;
+    }
+    .list-group-item {
+      border-left: none;
+      border-right: none;
+      background-color: var(--card-bg);
+      transition: background-color 0.3s ease;
+    }
+    .form-control:focus {
+      border-color: var(--card-header-bg);
+      box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25); /* Red shadow */
+    }
+    .dark-mode-toggle {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: var(--card-header-text);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container p-3">
+    <div class="card">
+      <div class="card-header text-center">
+        <button id="dark-mode-toggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
+          <i class="bi bi-moon-fill"></i>
+        </button>
+        <h1 class="h3 mb-0"><i class="bi bi-file-earmark-x-fill"></i> Cek Status Pembatalan Haji</h1>
+        <p class="mb-0 opacity-75">Platform Pengecekan Status Pembatalan Haji</p>
+      </div>
+      <div class="card-body p-4">
+        <form id="check-form">
+          <div class="input-group mb-3">
+            <span class="input-group-text"><i class="bi bi-person-vcard"></i></span>
+            <input type="text" class="form-control form-control-lg" id="nomor-porsi" placeholder="Masukkan nomor porsi Anda" required>
+            <button type="submit" class="btn btn-danger" id="submit-button">
+              <i class="bi bi-search"></i> Cek
+            </button>
+          </div>
+        </form>
+        <div class="text-center mb-4">
+          <a href="/" class="btn btn-outline-secondary me-2"><i class="bi bi-house-door-fill"></i> Halaman Utama</a>
+          <a href="/estimasi/" class="btn btn-outline-primary"><i class="bi bi-moon-stars-fill"></i> Cek Estimasi Keberangkatan</a>
+        </div>
+        <div id="status" class="mt-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('check-form');
+    const nomorPorsiInput = document.getElementById('nomor-porsi');
+    const statusDiv = document.getElementById('status');
+    const submitButton = document.getElementById('submit-button');
+    const originalButtonHtml = submitButton.innerHTML;
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+
+    const keyMappings = {
+      "nomor_porsi": "Nomor Porsi",
+      "nama": "Nama Jemaah",
+      "nama_ahli_waris": "Nama Ahli Waris",
+      "bank": "Bank",
+      "nomor_rekening": "Nomor Rekening",
+      "status_pembatalan": "Status Pembatalan",
+      "tgl_batal_pendaftaran": "Tgl Batal Pendaftaran",
+      "tgl_batal_kankemenag": "Tgl Batal Kankemenag",
+      "no_spm_bpkh": "No. SPM BPKH",
+      "tgl_spm_bpkh": "Tgl SPM BPKH",
+      "tgl_transfer_bps": "Tgl Transfer BPS",
+      "status_transfer": "Status Transfer"
+    };
+
+    // Dark Mode Logic
+    function applyTheme(theme) {
+      document.body.classList.toggle('dark-mode', theme === 'dark');
+      darkModeToggle.innerHTML = theme === 'dark' ? '<i class="bi bi-sun-fill"></i>' : '<i class="bi bi-moon-fill"></i>';
+    }
+
+    const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    applyTheme(savedTheme);
+
+    darkModeToggle.addEventListener('click', () => {
+      const newTheme = document.body.classList.contains('dark-mode') ? 'light' : 'dark';
+      localStorage.setItem('theme', newTheme);
+      applyTheme(newTheme);
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nomorPorsi = nomorPorsiInput.value.trim();
+      if (!nomorPorsi) return;
+
+      setLoading(true);
+      statusDiv.innerHTML = '';
+
+      try {
+        const response = await fetch(`/api/pembatalan?nomor=${nomorPorsi}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || `Terjadi kesalahan: ${response.statusText}`);
+        }
+
+        if (data && data.ResponseCode === '00' && data.Data && data.Data.length > 0) {
+          displaySuccess(data.Data[0]);
+        } else {
+          const errorMessage = data.ResposeMessage || 'Data tidak ditemukan atau nomor porsi tidak valid.';
+          displayError(errorMessage, data);
+        }
+
+      } catch (err) {
+        displayError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    function setLoading(isLoading) {
+      if (isLoading) {
+        statusDiv.innerHTML = `<div class="text-center"><div class="spinner-border text-danger" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2 text-muted">Mencari data...</p></div>`;
+        submitButton.disabled = true;
+        submitButton.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+      } else {
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalButtonHtml;
+      }
+    }
+
+    function displaySuccess(data) {
+      let resultHtml = '<h3 class="mb-3 text-center">✅ Hasil Pencarian</h3><ul class="list-group list-group-flush">';
+      for (const key in keyMappings) {
+        const label = keyMappings[key];
+        let value = data[key] || '-';
+        let listItemClass = '';
+
+        if (key === 'status_transfer' || key === 'status_pembatalan') {
+          const badgeColor = value.toLowerCase().includes('berhasil') ? 'bg-success' : 'bg-warning';
+          value = `<span class="badge ${badgeColor} fs-6 p-2">${value}</span>`;
+          listItemClass = 'list-group-item-primary';
+        }
+
+        resultHtml += `
+          <li class="list-group-item d-flex justify-content-between align-items-center ${listItemClass}">
+            <span class="fw-bold">${label}</span>
+            <span class="text-end">${value}</span>
+          </li>`;
+      }
+      resultHtml += '</ul>';
+      
+      const checkDate = new Date().toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'long' });
+      const timestampHtml = `<div class="mt-3 p-3 bg-light text-muted text-center rounded border"><i class="bi bi-clock-history me-2"></i>Data diperiksa pada: <strong>${checkDate}</strong></div>`;
+
+      statusDiv.innerHTML = `<div class="card shadow-sm border-success"><div class="card-body">${resultHtml}${timestampHtml}</div></div>`;
+    }
+
+    function displayError(message, rawData = null) {
+      let rawDataHtml = rawData ? `<div class="mt-3 text-start"><small class="text-muted">Respons mentah:</small><pre class="bg-light p-2 rounded small"><code>${JSON.stringify(rawData, null, 2)}</code></pre></div>` : '';
+      statusDiv.innerHTML = `<div class="alert alert-warning text-center border-0 shadow-sm"><i class="bi bi-exclamation-triangle-fill me-2"></i>${message}${rawDataHtml}</div>`;
+    }
+  </script>
+  <footer class="mt-4 text-center text-muted">
+    <small>develop by richieoct 2025</small>
+  </footer>
+</body>
+</html>

@@ -14,12 +14,36 @@ const headers = {
   'Accept': 'application/json, text/plain, */*'
 };
 
-app.get('/api/estimasi/:nomor', async (req, res) => {
-  const { nomor } = req.params;
+// Endpoint untuk Estimasi Keberangkatan
+app.get('/api/estimasi', async (req, res) => {
+  const { nomor } = req.query; // Menggunakan req.query
+  if (!nomor) {
+    return res.status(400).json({ message: 'Nomor porsi diperlukan.' });
+  }
   const url = `https://admin-kong-gateway.kemenag.go.id/api/haji-pintar/api-siskohat/siskohat/estimasi/${nomor}`;
 
   try {
     console.log(`Fetching data for: ${nomor}`);
+    const { data } = await axios.get(url, { headers });
+    res.json(data);
+  } catch (err) {
+    console.error(`Error for ${nomor}:`, err.response?.status || err.message);
+    const status = err.response?.status || 500;
+    const message = err.response?.data?.message || err.message || 'Terjadi kesalahan pada server';
+    res.status(status).json({ message });
+  }
+});
+
+// Endpoint untuk Status Pembatalan
+app.get('/api/pembatalan', async (req, res) => {
+  const { nomor } = req.query; // Menggunakan req.query
+  if (!nomor) {
+    return res.status(400).json({ message: 'Nomor porsi diperlukan.' });
+  }
+  const url = `https://admin-kong-gateway.kemenag.go.id/api/haji-pintar/api-siskohat/siskohat/pembatalan/${nomor}`;
+
+  try {
+    console.log(`Fetching cancellation data for: ${nomor}`);
     const { data } = await axios.get(url, { headers });
     res.json(data);
   } catch (err) {
